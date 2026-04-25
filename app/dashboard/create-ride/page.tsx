@@ -1,79 +1,138 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import {
+  LoadScript,
+  Autocomplete
+} from '@react-google-maps/api'
+
+const libraries: ("places")[] = ['places']
 
 export default function CreateRidePage() {
 
-  const [pickup, setPickup] = useState('')
+  const router = useRouter()
+
+  const [origin, setOrigin] = useState('')
   const [destination, setDestination] = useState('')
-  const [seats, setSeats] = useState(1)
+  const [availableSeats, setAvailableSeats] = useState(1)
 
-  const createRide = async () => {
+  const [pickupAutocomplete, setPickupAutocomplete] = useState<any>(null)
+  const [destinationAutocomplete, setDestinationAutocomplete] = useState<any>(null)
 
-    const {
-      data: { user }
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      alert('Login required')
-      return
-    }
+  async function createRide() {
 
     const { error } = await supabase
       .from('rides')
-      .insert({
-        pickup_location: pickup,
-        destination: destination,
-        available_seats: seats
-      })
+      .insert([
+        {
+          origin,
+          destination,
+          available_seats: availableSeats,
+          ride_status: 'active'
+        }
+      ])
 
     if (error) {
-      alert(error.message)
+      console.error(error)
+      alert('Failed to create ride')
     } else {
-      alert('Ride created successfully')
+      alert('Ride created successfully!')
+      router.push('/dashboard')
     }
   }
 
   return (
-    <div className='min-h-screen bg-black text-white p-10'>
 
-      <h1 className='text-5xl font-bold mb-10'>
-        Create Ride
-      </h1>
+    <LoadScript
+      googleMapsApiKey={
+        process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!
+      }
+      libraries={libraries}
+    >
 
-      <div className='max-w-xl space-y-4'>
+      <div className="min-h-screen bg-black text-white p-10">
 
-        <input
-          className='w-full p-4 rounded-xl bg-zinc-900'
-          placeholder='Pickup Location'
-          value={pickup}
-          onChange={(e) => setPickup(e.target.value)}
-        />
+        <div className="max-w-2xl mx-auto">
 
-        <input
-          className='w-full p-4 rounded-xl bg-zinc-900'
-          placeholder='Destination'
-          value={destination}
-          onChange={(e) => setDestination(e.target.value)}
-        />
+          <h1 className="text-6xl font-black mb-10">
+            Create Ride
+          </h1>
 
-        <input
-          type='number'
-          className='w-full p-4 rounded-xl bg-zinc-900'
-          value={seats}
-          onChange={(e) => setSeats(Number(e.target.value))}
-        />
+          <div className="space-y-6">
 
-        <button
-          onClick={createRide}
-          className='bg-white text-black px-8 py-4 rounded-2xl font-bold'
-        >
-          Create Ride
-        </button>
+            <Autocomplete
+              onLoad={(autocomplete) =>
+                setPickupAutocomplete(autocomplete)
+              }
+              onPlaceChanged={() => {
+                const place =
+                  pickupAutocomplete?.getPlace()
+
+                setOrigin(
+                  place?.formatted_address || ''
+                )
+              }}
+            >
+
+              <input
+                type="text"
+                placeholder="Pickup Location"
+                className="w-full bg-zinc-900 p-5 rounded-2xl text-white"
+              />
+
+            </Autocomplete>
+
+            <Autocomplete
+              onLoad={(autocomplete) =>
+                setDestinationAutocomplete(
+                  autocomplete
+                )
+              }
+              onPlaceChanged={() => {
+                const place =
+                  destinationAutocomplete?.getPlace()
+
+                setDestination(
+                  place?.formatted_address || ''
+                )
+              }}
+            >
+
+              <input
+                type="text"
+                placeholder="Destination"
+                className="w-full bg-zinc-900 p-5 rounded-2xl text-white"
+              />
+
+            </Autocomplete>
+
+            <input
+              type="number"
+              placeholder="Seats"
+              value={availableSeats}
+              onChange={(e) =>
+                setAvailableSeats(
+                  Number(e.target.value)
+                )
+              }
+              className="w-full bg-zinc-900 p-5 rounded-2xl text-white"
+            />
+
+            <button
+              onClick={createRide}
+              className="bg-white text-black px-8 py-4 rounded-2xl font-bold"
+            >
+              Create Ride
+            </button>
+
+          </div>
+
+        </div>
 
       </div>
 
-    </div>
+    </LoadScript>
   )
 }

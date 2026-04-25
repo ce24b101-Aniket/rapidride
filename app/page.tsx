@@ -1,85 +1,100 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import Link from 'next/link'
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen gradient-bg text-white relative overflow-hidden">
+      <div className="hero-glow"></div>
 
-      <section className="min-h-screen flex flex-col justify-center items-center text-center px-6">
+      <section className="px-12 py-32">
 
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-7xl font-black"
-        >
-          RapidRide
-        </motion.h1>
+        <div className="max-w-7xl mx-auto">
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-6 text-xl text-gray-400 max-w-2xl"
-        >
-          Smart corporate carpooling for modern companies.
-          Reduce commute costs, traffic, and carbon emissions.
-        </motion.p>
+          <div className="max-w-6xl">
 
-        <div className="flex gap-4 mt-10">
+            <p className="text-zinc-400 mb-6 text-xl">
+              Corporate Carpooling Reimagined
+            </p>
 
-          <Link href="/auth/signup">
-            <button className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition">
-              Get Started
-            </button>
-          </Link>
+            <h1 className="text-8xl md:text-9xl font-black leading-[0.95] mb-10 max-w-5xl">
+              Smarter Employee Commutes
+              for Modern Companies
+            </h1>
 
-          <Link href="/auth/login">
-            <button className="border border-gray-700 px-8 py-4 rounded-2xl font-bold hover:bg-white hover:text-black transition">
-              Login
-            </button>
-          </Link>
+            <p className="text-3xl text-zinc-400 mb-14 leading-relaxed max-w-3xl">
+              RapidRide helps employees share rides safely,
+              reduce transportation costs,
+              and build sustainable workplaces.
+            </p>
+
+          <div className="flex gap-6 mt-10">
+
+              <Link
+                href="/dashboard"
+                className="bg-white text-black px-8 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition"
+              >
+                Open Dashboard
+              </Link>
+
+              <Link
+                href="/dashboard/create-ride"
+                className="border border-zinc-700 px-8 py-4 rounded-2xl text-lg"
+              >
+                Create Ride
+              </Link>
+
+            </div>
+
+          </div>
 
         </div>
 
       </section>
 
-      <section className="grid md:grid-cols-3 gap-6 px-10 pb-20">
+      <section className="px-10 pb-24">
 
-        <div className="bg-zinc-900 p-8 rounded-3xl">
-          <h2 className="text-3xl font-bold">
-            Save Money
-          </h2>
+        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
 
-          <p className="text-gray-400 mt-4">
-            Share rides with colleagues and reduce daily commute expenses.
-          </p>
-        </div>
+          <div className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800">
 
-        <div className="bg-zinc-900 p-8 rounded-3xl">
-          <h2 className="text-3xl font-bold">
-            Eco Friendly
-          </h2>
+            <h2 className="text-3xl font-black mb-4">
+              Secure Employee Network
+            </h2>
 
-          <p className="text-gray-400 mt-4">
-            Reduce traffic congestion and carbon emissions.
-          </p>
-        </div>
+            <p className="text-zinc-400">
+              Only verified employees can access rides,
+              ensuring safety and trust within organizations.
+            </p>
 
-        <div className="bg-zinc-900 p-8 rounded-3xl">
-          <h2 className="text-3xl font-bold">
-            Corporate Verified
-          </h2>
+          </div>
 
-          <p className="text-gray-400 mt-4">
-            Only verified company employees can join rides.
-          </p>
+          <div className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800">
+
+            <h2 className="text-3xl font-black mb-4">
+              Reduce Fuel Costs
+            </h2>
+
+            <p className="text-zinc-400">
+              Employees save money every month through optimized ride sharing.
+            </p>
+
+          </div>
+
+          <div className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800">
+
+            <h2 className="text-3xl font-black mb-4">
+              Eco Friendly Mobility
+            </h2>
+
+            <p className="text-zinc-400">
+              Fewer vehicles on the road means lower emissions and cleaner cities.
+            </p>
+
+          </div>
+
         </div>
 
       </section>
 
-    </main>
+    </div>
   )
 }
